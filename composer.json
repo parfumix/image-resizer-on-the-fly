@@ -1,0 +1,20 @@
+{
+  "name": "terranet/image-resizer-on-the-fly",
+  "description": "Image resizer on the fly",
+  "authors": [
+    {
+      "name": "Radu",
+      "email": "radu.bordei89@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Parfumix\\Imageonfly\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "intervention/image": "2.1.1",
+    "symfony/Filesystem": "~2.1"
+  }
+}
