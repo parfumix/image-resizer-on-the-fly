@@ -1,20 +1,22 @@
 <?php
 
+namespace Parfumix\Imageonfly;
+
 /**
- * Get path from root ..
+ * Get root path
+ *
+ * @param null $directory
+ * @return string
  */
-if(! function_exists('get_path')) {
+function get_path($directory = null) {
+    $currentPath = realpath(dirname(__FILE__));
 
-    function get_path($directory = null) {
-        $currentPath = realpath(dirname(__FILE__));
+    $rootPath = join(DIRECTORY_SEPARATOR, array_slice(explode(DIRECTORY_SEPARATOR, $currentPath), 0, -3));
 
-        $rootPath = join(DIRECTORY_SEPARATOR, array_slice(explode(DIRECTORY_SEPARATOR, $currentPath), 0, -3));
+    if ($directory)
+        $rootPath .= DIRECTORY_SEPARATOR . $directory;
 
-        if ($directory)
-            $rootPath .= DIRECTORY_SEPARATOR . $directory;
-
-        return $rootPath;
-    }
+    return $rootPath;
 }
 
 /**
@@ -22,24 +24,19 @@ if(! function_exists('get_path')) {
  * Get public path ..
  *
  */
-if(! function_exists('publicPath')) {
-
-    function publicPath($directory = null) {
-        return get_path(
-            'public'. DIRECTORY_SEPARATOR . $directory
-        );
-    }
+function publicPath($directory = null) {
+    return get_path(
+        'public' . DIRECTORY_SEPARATOR . $directory
+    );
 }
 
 /**
  * Get config path ..
- *
+ * @param null $directory
+ * @return string
  */
-if(! function_exists('configPath')) {
-
-    function configPath($directory = null) {
-        return get_path(
-            'config'. DIRECTORY_SEPARATOR . $directory
-        );
-    }
+function configPath($directory = null) {
+    return get_path(
+        'config' . DIRECTORY_SEPARATOR . $directory
+    );
 }
