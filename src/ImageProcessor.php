@@ -2,16 +2,21 @@
 
 namespace Parfumix\Imageonfly;
 
-use Parfumix\Imageonfly\Templates\Thumbnail;
 use Image as Imager;
 use Intervention\Image\Image;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
 class ImageProcessor implements ImageProcessorInterface {
 
-    public $templates = [
-        'thumbnail' => Thumbnail::class
-    ];
+    /**
+     * @var array
+     */
+    private $configuration;
+
+    public function __construct(array $configuration = array()) {
+
+        $this->configuration = $configuration;
+    }
 
     /**
      * Upload array of images ..
