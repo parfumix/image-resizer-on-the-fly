@@ -5,6 +5,7 @@ namespace Parfumix\Imageonfly;
 use AndyTruong\Yaml\YamlParser;
 use Intervention\Image\Filters\FilterInterface;
 use Intervention\Image\Image;
+use Parfumix\Imageonfly\Exceptions\ImageManagerException;
 use Parfumix\Imageonfly\Interfaces\ImageManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Intervention\Image\ImageManager as ManagerImage;

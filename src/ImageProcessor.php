@@ -2,8 +2,10 @@
 
 namespace Parfumix\Imageonfly;
 
+use Illuminate\Config\Repository;
 use Image as Imager;
 use Intervention\Image\Image;
+use Parfumix\Imageonfly\Exceptions\ImageProcessorException;
 use Parfumix\Imageonfly\Interfaces\ImageProcessorInterface;
 use Parfumix\Imageonfly\Interfaces\TemplateResolverInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
@@ -20,7 +22,7 @@ class ImageProcessor implements ImageProcessorInterface {
      */
     private $templateResolver;
 
-    public function __construct(array $configuration = array(), TemplateResolverInterface $templateResolver) {
+    public function __construct(Repository $configuration, TemplateResolverInterface $templateResolver) {
 
         $this->configuration = $configuration;
         $this->templateResolver = $templateResolver;
@@ -34,14 +36,21 @@ class ImageProcessor implements ImageProcessorInterface {
      * @param array $filters
      * @return array
      */
-    public function upload($images, $path, array $filters = []) {
+    public function upload($images, $path = null, array $filters = []) {
         if (! is_array($images))
             $images = (array)$images;
 
         return array_map(function ($image) use ($path, $filters) {
             $image = Imager::make($image);
 
-            $this->applyFilters($image, $filters);
+            $image = $this->applyFilters($image, $filters);
+
+            if( is_null($path) ) {
+                if( ! $this->configuration->has('store_path') )
+                    throw new ImageProcessorException(_('Invalid store path'));
+
+                $path = $this->configuration->get('store_path');
+            }
 
             return $image->save(
                 sprintf('%s%s.%s', $path, uniqid(), $this->guessExtension(

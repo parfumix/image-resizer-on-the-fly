@@ -2,6 +2,7 @@
 
 namespace Parfumix\Imageonfly;
 
+use Illuminate\Config\Repository;
 use Parfumix\Imageonfly\Interfaces\TemplateResolverInterface;
 
 class TemplateResolver implements TemplateResolverInterface  {
@@ -11,7 +12,7 @@ class TemplateResolver implements TemplateResolverInterface  {
      */
     private $templates;
 
-    public function __construct(array $templates = array()) {
+    public function __construct(Repository $templates) {
 
         $this->templates = $templates;
     }
@@ -24,6 +25,7 @@ class TemplateResolver implements TemplateResolverInterface  {
      * @return mixed
      */
     public function resolve($alias) {
-        return $this->templates[$alias];
+        if( $this->templates->has($alias) )
+            return $this->templates->get($alias);
     }
 }

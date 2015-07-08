@@ -2,7 +2,9 @@
 
 namespace Parfumix\Imageonfly;
 
+use Illuminate\Config\Repository;
 use Illuminate\Support\ServiceProvider;
+use Parfumix\Imageonfly\Interfaces\ImageProcessorInterface;
 use Parfumix\Imageonfly\Interfaces\TemplateResolverInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -32,7 +34,9 @@ class ImageOnflyServiceProvider extends ServiceProvider {
          */
         $this->app->singleton(TemplateResolverInterface::class, function() {
             return new TemplateResolver(
-                array_only($this->getConfiguration(), ['templates'])
+                new Repository(
+                    $this->getConfiguration()->get('templates')
+                )
             );
         });
 
@@ -41,7 +45,7 @@ class ImageOnflyServiceProvider extends ServiceProvider {
          */
         $this->app->singleton(ImageProcessorInterface::class, function($app) {
             return new ImageProcessor(
-                array_except($this->getConfiguration(), ['templates']), $app[TemplateResolverInterface::class]
+                $this->getConfiguration(), $app[TemplateResolverInterface::class]
             );
         });
 
@@ -53,11 +57,11 @@ class ImageOnflyServiceProvider extends ServiceProvider {
      */
     protected function getConfiguration() {
         if(! $this->configuration) {
-            $parsedYaml =  Yaml::parse(file_get_contents(
+            $configurations =  Yaml::parse(file_get_contents(
                 config('yaml/imageonfly')
             ));
 
-            $this->configuration = $parsedYaml;
+            $this->configuration = new Repository($configurations);
         }
 
         return $this->configuration;
