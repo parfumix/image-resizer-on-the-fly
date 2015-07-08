@@ -49,7 +49,7 @@ class ImageProcessor implements ImageProcessorInterface {
                 if( ! $this->configuration->has('store_path') )
                     throw new ImageProcessorException(_('Invalid store path'));
 
-                $path = $this->configuration->get('store_path');
+                $path = \App\Library\Image\public_path($this->configuration->get('store_path'));
             }
 
             return $image->save(
@@ -82,7 +82,7 @@ class ImageProcessor implements ImageProcessorInterface {
      * @param array $filters
      * @return Image
      */
-    protected function applyFilters(Image $image, array $filters) {
+    public function applyFilters(Image $image, array $filters) {
         foreach ($filters as $filter) {
             $filterClass = $this->templateResolver[$filter];
 
