@@ -12,12 +12,12 @@
       "Parfumix\\Imageonfly\\": "src/"
     }
   },
-  "minimum-stability": "dev",
   "require": {
     "intervention/image": "2.1.1",
     "symfony/Filesystem": "~2.8",
     "symfony/http-foundation": "~2.8",
     "symfony/yaml": "~2.8",
     "illuminate/config": "~5.1"
-  }
+  },
+  "minimum-stability": "dev"
 }
