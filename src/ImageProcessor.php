@@ -45,12 +45,8 @@ class ImageProcessor implements ImageProcessorInterface {
 
             $image = $this->applyFilters($image, $filters);
 
-            if( is_null($path) ) {
-                if( ! $this->configuration->has('store_path') )
-                    throw new ImageProcessorException(_('Invalid store path'));
-
-                $path = \App\Library\Image\public_path($this->configuration->get('store_path'));
-            }
+            if( is_null($path) )
+                $path = $this->getPath();
 
             return $image->save(
                 sprintf('%s%s.%s', $path, uniqid(), $this->guessExtension(
@@ -104,5 +100,18 @@ class ImageProcessor implements ImageProcessorInterface {
             return $default;
 
         return $quality;
+    }
+
+    /**
+     * Get default path ..
+     *
+     * @return string
+     * @throws ImageProcessorException
+     */
+    protected function getPath() {
+        if( ! $this->configuration->has('store_path') )
+            throw new ImageProcessorException(_('Invalid store path'));
+
+        return \App\Library\Image\public_path($this->configuration->get('store_path'));
     }
 }
