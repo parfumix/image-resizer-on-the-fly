@@ -40,3 +40,16 @@ function configPath($directory = null) {
         'config' . DIRECTORY_SEPARATOR . $directory
     );
 }
+
+/**
+ * Return first value of array .
+ *
+ * @param array $array
+ */
+function arrayFirst(array $array) {
+
+    if(! count($array))
+        return;
+
+    return $array[0];
+}
