@@ -1,6 +1,6 @@
 {
   "name": "parfumix/laravel-image-uploader",
-  "description": "Image resizer on the fly",
+  "description": "Laravel image uploader",
   "authors": [
     {
       "name": "Radu",
