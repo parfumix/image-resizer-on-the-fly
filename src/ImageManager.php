@@ -56,6 +56,8 @@ class ImageManager implements ImageManagerInterface {
         $storePath = $this->configRepository
             ->get('static_path');
 
+        #@todo check for first if file exists ..
+
         $images = $this->imageProcessor
             ->upload($image, publicPath($storePath), [$template]);
 
