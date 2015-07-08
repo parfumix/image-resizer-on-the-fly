@@ -55,7 +55,7 @@ class ImageProcessor implements ImageProcessorInterface {
             return $image->save(
                 sprintf('%s%s.%s', $path, uniqid(), $this->guessExtension(
                     $image
-                ))
+                )), $this->getQuality()
             );
 
         }, array_filter($images));
@@ -91,5 +91,18 @@ class ImageProcessor implements ImageProcessorInterface {
         }
 
         return $image;
+    }
+
+    /**
+     * Get default quality .
+     *
+     * @param int $default
+     * @return bool|int
+     */
+    protected function getQuality($default = 60) {
+        if(! $quality = $this->configuration->has('quality'))
+            return $default;
+
+        return $quality;
     }
 }
