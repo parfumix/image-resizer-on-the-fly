@@ -1,0 +1,12 @@
+# on store images set default quality .
+quality: 60
+
+# here will be declared folder where we store images .
+store_path : public/upload
+
+# here will be declarded location where we store temp images .
+static_path: public/upload/static
+
+# you can delclare own templates and set alias there .
+templates:
+  thumbnail: Parfumix\Imageonfly\Templates\Thumbnail
