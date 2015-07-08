@@ -1,6 +1,6 @@
 <?php
 
-namespace Parfumix\Imageonfly;
+namespace Parfumix\Imageonfly\Exceptions;
 
 use Exception;
 
