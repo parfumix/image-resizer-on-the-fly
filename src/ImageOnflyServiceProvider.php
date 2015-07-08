@@ -10,7 +10,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class ImageOnflyServiceProvider extends ServiceProvider {
 
-    protected $configuration = array();
+    protected static $configuration = array();
 
     /**
      * Publish resources.
@@ -35,7 +35,8 @@ class ImageOnflyServiceProvider extends ServiceProvider {
         $this->app->singleton(TemplateResolverInterface::class, function() {
             return new TemplateResolver(
                 new Repository(
-                    $this->getConfiguration()->get('templates')
+                    self::getConfiguration()
+                        ->get('templates')
                 )
             );
         });
@@ -45,7 +46,7 @@ class ImageOnflyServiceProvider extends ServiceProvider {
          */
         $this->app->singleton(ImageProcessorInterface::class, function($app) {
             return new ImageProcessor(
-                $this->getConfiguration(), $app[TemplateResolverInterface::class]
+                self::getConfiguration(), $app[TemplateResolverInterface::class]
             );
         });
 
@@ -55,15 +56,15 @@ class ImageOnflyServiceProvider extends ServiceProvider {
     /**
      * Parse package configuration ..
      */
-    protected function getConfiguration() {
-        if(! $this->configuration) {
+    protected static function getConfiguration() {
+        if(! self::$configuration) {
             $configurations =  Yaml::parse(file_get_contents(
                 config('yaml/imageonfly')
             ));
 
-            $this->configuration = new Repository($configurations);
+            self::$configuration = new Repository($configurations);
         }
 
-        return $this->configuration;
+        return self::$configuration;
     }
 }
