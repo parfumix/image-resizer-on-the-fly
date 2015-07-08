@@ -5,12 +5,13 @@ namespace Parfumix\Imageonfly;
 use AndyTruong\Yaml\YamlParser;
 use Intervention\Image\Filters\FilterInterface;
 use Intervention\Image\Image;
+use Parfumix\Imageonfly\Interfaces\ImageManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Intervention\Image\ImageManager as ManagerImage;
 
 require_once(__DIR__ . '/../helpers.php');
 
-class ImageManager implements ImageManagerContract {
+class ImageManager implements ImageManagerInterface {
 
     const PATH_TO_FILTERS = 'yaml/upload/templates.yaml';
 

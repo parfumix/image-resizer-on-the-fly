@@ -3,6 +3,7 @@
 namespace Parfumix\Imageonfly;
 
 use Illuminate\Support\ServiceProvider;
+use Parfumix\Imageonfly\Interfaces\TemplateResolverInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class ImageOnflyServiceProvider extends ServiceProvider {
@@ -25,11 +26,26 @@ class ImageOnflyServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        $this->app->singleton(ImageProcessorInterface::class, function() {
-            return new ImageProcessor(
-                $this->getConfiguration()
+
+        /**
+         * Register template resolver .
+         */
+        $this->app->singleton(TemplateResolverInterface::class, function() {
+            return new TemplateResolver(
+                array_only($this->getConfiguration(), ['templates'])
             );
         });
+
+        /**
+         * Register image processor to Ioc.
+         */
+        $this->app->singleton(ImageProcessorInterface::class, function($app) {
+            return new ImageProcessor(
+                array_except($this->getConfiguration(), ['templates']), $app[TemplateResolverInterface::class]
+            );
+        });
+
+
     }
 
     /**

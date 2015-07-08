@@ -4,6 +4,8 @@ namespace Parfumix\Imageonfly;
 
 use Image as Imager;
 use Intervention\Image\Image;
+use Parfumix\Imageonfly\Interfaces\ImageProcessorInterface;
+use Parfumix\Imageonfly\Interfaces\TemplateResolverInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
 class ImageProcessor implements ImageProcessorInterface {
@@ -13,9 +15,15 @@ class ImageProcessor implements ImageProcessorInterface {
      */
     private $configuration;
 
-    public function __construct(array $configuration = array()) {
+    /**
+     * @var TemplateResolverInterface
+     */
+    private $templateResolver;
+
+    public function __construct(array $configuration = array(), TemplateResolverInterface $templateResolver) {
 
         $this->configuration = $configuration;
+        $this->templateResolver = $templateResolver;
     }
 
     /**
@@ -33,8 +41,7 @@ class ImageProcessor implements ImageProcessorInterface {
         return array_map(function ($image) use ($path, $filters) {
             $image = Imager::make($image);
 
-            foreach ($filters as $filter)
-                $image = (new $filter)->applyFilter($image);
+            $this->applyFilters($image, $filters);
 
             return $image->save(
                 sprintf('%s%s.%s', $path, uniqid(), $this->guessExtension(
@@ -57,5 +64,23 @@ class ImageProcessor implements ImageProcessorInterface {
         return $guesser->guess(
             $image->mime()
         );
+    }
+
+    /**
+     * Apply filters .
+     *
+     * @param Image $image
+     * @param array $filters
+     * @return Image
+     */
+    protected function applyFilters(Image $image, array $filters) {
+        foreach ($filters as $filter) {
+            $filterClass = $this->templateResolver[$filter];
+
+            if( class_exists($filterClass) )
+                $image = (new $filterClass)->applyFilter($image);
+        }
+
+        return $image;
     }
 }
