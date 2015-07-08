@@ -21,5 +21,9 @@ class ImageOnflyServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register() { }
+    public function register() {
+        $this->app->singleton(ImageProcessorInterface::class, function() {
+            return new ImageProcessor();
+        });
+    }
 }

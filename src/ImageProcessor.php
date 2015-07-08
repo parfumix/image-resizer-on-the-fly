@@ -3,9 +3,11 @@
 namespace Parfumix\Imageonfly;
 
 use Parfumix\Imageonfly\Templates\Thumbnail;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Image as Imager;
+use Intervention\Image\Image;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
-class ImageProcessor {
+class ImageProcessor implements ImageProcessorInterface {
 
     public $templates = [
         'thumbnail' => Thumbnail::class
@@ -19,24 +21,36 @@ class ImageProcessor {
      * @param array $filters
      * @return array
      */
-    public static function upload($images, $path, $filters = []) {
-        if (!is_array($images))
+    public function upload($images, $path, array $filters = []) {
+        if (! is_array($images))
             $images = (array)$images;
 
         return array_map(function ($image) use ($path, $filters) {
-            if (! $image instanceof UploadedFile)
-                $image = new UploadedFile($image, null);
-
-            $imager = \Image::make($image);
+            $image = Imager::make($image);
 
             foreach ($filters as $filter)
-                $imager = (new $filter)->applyFilter($imager);
+                $image = (new $filter)->applyFilter($image);
 
-            return $imager->save(
-                sprintf('%s%s.%s', $path, uniqid(), $image->guessClientExtension())
+            return $image->save(
+                sprintf('%s%s.%s', $path, uniqid(), $this->guessExtension(
+                    $image
+                ))
             );
 
         }, array_filter($images));
     }
 
+    /**
+     * Guess extension .
+     *
+     * @param Image $image
+     * @return string
+     */
+    protected function guessExtension(Image $image) {
+        $guesser = ExtensionGuesser::getInstance();
+
+        return $guesser->guess(
+            $image->mime()
+        );
+    }
 }
