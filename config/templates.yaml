@@ -1,4 +1,0 @@
-store_path: public
-
-templates:
-  thumbnail: Parfumix\Imageonfly\Templates\Thumbnail
