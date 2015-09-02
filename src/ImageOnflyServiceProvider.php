@@ -11,7 +11,7 @@ class ImageOnFlyServiceProvider extends ServiceProvider {
      */
     public function boot() {
         $this->publishes([
-            __DIR__ . DIRECTORY_SEPARATOR . '../config/' => config_path('yaml/imageonfly'),
+            __DIR__ . DIRECTORY_SEPARATOR . '../configuration/' => config_path('yaml/imageonfly'),
             __DIR__ . DIRECTORY_SEPARATOR . '../image.php' => public_path()
         ], 'config');
     }
