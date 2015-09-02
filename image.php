@@ -1,7 +1,7 @@
 <?php
 
 use Parfumix\Imageonfly;
-use \Symfony\Component\HttpFoundation\File;
+use Symfony\Component\HttpFoundation\File;
 
 require __DIR__.'/../vendor/autoload.php';
 
@@ -13,7 +13,7 @@ $staticImage = $_GET['static'];
 list($alias, $original) = explode('@', $staticImage);
 $raw                    = pathinfo($alias);
 
-$configurations = Imageonfly\ConfigRepository::getConfigurations();
+$configurations = new Imageonfly\ConfigRepository;
 
 $processor = new Imageonfly\ImageProcessor(
     $configurations, (new Imageonfly\TemplateResolver(

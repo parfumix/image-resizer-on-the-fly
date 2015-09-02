@@ -1,46 +1,52 @@
 <?php
 
 namespace Parfumix\Imageonfly;
+
 use Symfony\Component\Yaml\Yaml;
-use Illuminate\Config\Repository;
 
 class ConfigRepository {
 
-    protected static $configurations = array();
+    const CONFIG_FILE = 'yaml/imageonfly/configuration.yaml';
+
+    protected $configurations = [];
+
+    public function __construct() {
+        $configurations = Yaml::parse(file_get_contents(
+            configPath(self::CONFIG_FILE)
+        ));
+
+        $this->setConfigurations($configurations);
+    }
 
     /**
      * Set configurations .
      *
+     * @param array $configurations
+     * @return $this
+     */
+    public function setConfigurations(array $configurations = array()) {
+        $this->configurations = $configurations;
+
+        return $this;
+    }
+
+    /**
+     * Get all configurations .
+     *
      * @return array
      */
-    public static function getConfigurations() {
-        if(! self::$configurations) {
-            self::$configurations = self::parseConfigurations();
-        }
-
-        return self::$configurations;
+    public function getConfigurations() {
+        return $this->configurations;
     }
 
     /**
-     * @param array $configurations
-     * @return bool
-     */
-    public static function setConfigurations(array $configurations) {
-        self::$configurations = $configurations;
-
-        return true;
-    }
-
-    /**
-     * Parse yaml configurations ..
+     * Get configuration by key .
      *
-     * @return Repository
+     * @param $key
+     * @return mixed
      */
-    protected static function parseConfigurations() {
-        $configurations =  Yaml::parse(file_get_contents(
-            configPath(ImageOnflyServiceProvider::CONFIG_PATH)
-        ));
-
-        return (new Repository($configurations));
+    public function getConfiguration($key) {
+        if( isset($this->configurations[$key]) )
+            return $this->configurations[$key];
     }
 }

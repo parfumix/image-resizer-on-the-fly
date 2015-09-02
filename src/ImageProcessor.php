@@ -2,11 +2,9 @@
 
 namespace Parfumix\Imageonfly;
 
-use Illuminate\Config\Repository;
 use Image as Imager;
 use Intervention\Image\Image;
 use Parfumix\Imageonfly\Exceptions\ImageProcessorException;
-use Parfumix\Imageonfly\Interfaces\TemplateResolverInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
 class ImageProcessor {
@@ -14,16 +12,16 @@ class ImageProcessor {
     /**
      * @var array
      */
-    private $configuration;
+    private $configurations;
 
     /**
-     * @var TemplateResolverInterface
+     * @var
      */
     private $templateResolver;
 
-    public function __construct(Repository $configuration, TemplateResolverInterface $templateResolver) {
+    public function __construct($configurations, $templateResolver) {
 
-        $this->configuration = $configuration;
+        $this->configurations    = $configurations;
         $this->templateResolver = $templateResolver;
     }
 
@@ -95,10 +93,7 @@ class ImageProcessor {
      * @return bool|int
      */
     protected function getQuality($default = 60) {
-        if(! $quality = $this->configuration->has('quality'))
-            return $default;
-
-        return $quality;
+        return isset($this->configurations['quality']) ? $this->configurations['quality'] : $default;
     }
 
     /**
@@ -108,9 +103,9 @@ class ImageProcessor {
      * @throws ImageProcessorException
      */
     protected function getPath() {
-        if( ! $this->configuration->has('store_path') )
+        if( ! isset($this->configurations['store_path']) )
             throw new ImageProcessorException(_('Invalid store path'));
 
-        return publicPath($this->configuration->get('store_path'));
+        return publicPath($this->configurations['store_path']);
     }
 }

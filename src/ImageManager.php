@@ -3,27 +3,21 @@
 namespace Parfumix\Imageonfly;
 
 use Parfumix\Imageonfly\Interfaces\ImageManagerInterface;
-use Parfumix\Imageonfly\Interfaces\ImageProcessorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-require_once(__DIR__ . '/../helpers.php');
 
 class ImageManager implements ImageManagerInterface {
 
     /**
-     * @var ImageProcessorInterface
+     * @var
      */
     private $imageProcessor;
+
     /**
      * @var ConfigRepository
      */
     private $configRepository;
 
-    /**
-     * @param ImageProcessorInterface $imageProcessor
-     * @param ConfigRepository $configRepository
-     */
-    public function __construct(ImageProcessorInterface $imageProcessor, ConfigRepository $configRepository) {
+    public function __construct($imageProcessor, ConfigRepository $configRepository) {
 
         $this->imageProcessor = $imageProcessor;
         $this->configRepository = $configRepository;
@@ -36,7 +30,7 @@ class ImageManager implements ImageManagerInterface {
      */
     public function store(UploadedFile $image, $template) {
         $storePath = $this->configRepository
-            ->get('static_path');
+            ->getConfiguration('static_path');
 
         return $this->imageProcessor
             ->upload($image, publicPath($storePath), [$template]);
@@ -50,7 +44,7 @@ class ImageManager implements ImageManagerInterface {
      */
     public function render(UploadedFile $image, $template) {
         $storePath = $this->configRepository
-            ->get('static_path');
+            ->getConfiguration('static_path');
 
         #@todo check for first if file exists ..
 

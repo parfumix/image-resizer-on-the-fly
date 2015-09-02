@@ -22,7 +22,8 @@ function get_path($directory = null) {
 /**
  *
  * Get public path ..
- *
+ * @param null $directory
+ * @return string
  */
 function publicPath($directory = null) {
     return get_path(

@@ -4,16 +4,14 @@ namespace Parfumix\Imageonfly;
 
 use Illuminate\Support\ServiceProvider;
 
-class ImageOnflyServiceProvider extends ServiceProvider {
-
-    const CONFIG_PATH = 'yaml/imageonfly/configuration.yaml';
+class ImageOnFlyServiceProvider extends ServiceProvider {
 
     /**
      * Publish resources.
      */
     public function boot() {
         $this->publishes([
-            __DIR__ . DIRECTORY_SEPARATOR . '../config' => config_path(self::CONFIG_PATH),
+            __DIR__ . DIRECTORY_SEPARATOR . '../config/' => config_path('yaml/imageonfly'),
             __DIR__ . DIRECTORY_SEPARATOR . '../image.php' => public_path()
         ], 'config');
     }
@@ -24,7 +22,7 @@ class ImageOnflyServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        $configurations = ConfigRepository::getConfigurations();
+        $configurations = new ConfigRepository;
 
         /**
          * Register template resolver .
