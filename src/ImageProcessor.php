@@ -46,11 +46,10 @@ class ImageProcessor {
                 $path = $this->getPath();
 
             return $image->save(
-                sprintf('%s%s.%s', $path, uniqid(), $this->guessExtension(
+                sprintf('%s/%s.%s', $path, uniqid(), $this->guessExtension(
                     $image
                 )), $this->getQuality()
             );
-
         }, array_filter($images));
     }
 
