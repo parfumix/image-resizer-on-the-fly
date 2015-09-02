@@ -2,10 +2,10 @@
 quality: 60
 
 # here will be declared folder where we store images .
-store_path : upload
+store_path : /upload
 
 # here will be declarded location where we store temp images .
-static_path: upload/static
+static_path: /upload/static
 
 # you can delclare own templates and set alias there .
 templates:
