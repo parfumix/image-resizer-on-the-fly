@@ -3,6 +3,7 @@
 namespace Parfumix\Imageonfly;
 
 use Illuminate\Support\ServiceProvider;
+use Flysap\Support;
 
 class ImageOnFlyServiceProvider extends ServiceProvider {
 
@@ -22,21 +23,42 @@ class ImageOnFlyServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
-        $configurations = new ConfigRepository;
+        $this->loadConfiguration();
+
+        Support\merge_yaml_config_from(
+            config_path('yaml/imageonfly/general.yaml') , 'image-on-fly'
+        );
 
         /**
          * Register template resolver .
          */
-        $this->app->singleton('image-template-resolver', function() use($configurations) {
-            return new TemplateResolver($configurations);
+        $this->app->singleton('image-template-resolver', function() {
+            return new TemplateResolver(
+                config('image-on-fly')
+            );
         });
 
         /**
          * Register image processor to Ioc.
          */
-        $this->app->singleton('image-processor', function($app) use($configurations) {
-            return new ImageProcessor($configurations, $app['image-template-resolver']
+        $this->app->singleton('image-processor', function($app) {
+            return new ImageProcessor(
+                config('image-on-fly'),
+                $app['image-template-resolver']
             );
         });
+    }
+
+    /**
+     * Load configuration .
+     *
+     * @return $this
+     */
+    protected function loadConfiguration() {
+        Support\set_config_from_yaml(
+            __DIR__ . '/../configuration/general.yaml' , 'image-on-fly'
+        );
+
+        return $this;
     }
 }

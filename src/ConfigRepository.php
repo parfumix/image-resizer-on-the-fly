@@ -6,16 +6,22 @@ use Symfony\Component\Yaml\Yaml;
 
 class ConfigRepository {
 
-    const CONFIG_FILE = 'yaml/imageonfly/configuration.yaml';
+    const CONFIG_FILE = 'yaml/imageonfly/general.yaml';
 
     protected $configurations = [];
 
     public function __construct() {
-        $configurations = Yaml::parse(file_get_contents(
+        $userConfigurations = Yaml::parse(file_get_contents(
             configPath(self::CONFIG_FILE)
         ));
 
-        $this->setConfigurations($configurations);
+        $localConfigurations = Yaml::parse(file_get_contents(
+            __DIR__ . '../configuration/general.yaml'
+        ));
+
+        $this->setConfigurations(
+            array_merge($userConfigurations, $localConfigurations)
+        );
     }
 
     /**
