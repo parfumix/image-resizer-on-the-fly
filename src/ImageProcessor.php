@@ -43,13 +43,18 @@ class ImageProcessor {
             $image = $this->applyFilters($image, $filters);
 
             if( is_null($path) )
-                $path = $this->getPath();
+                $path = $this->getStorePath();
+
+            $filename =  sprintf('%s.%s', uniqid(), $this->guessExtension(
+                $image
+            ), $this->getQuality());
+
+            $image->relative_path = $this->getStorePath(false) . DIRECTORY_SEPARATOR . $filename;
 
             return $image->save(
-                sprintf('%s/%s.%s', $path, uniqid(), $this->guessExtension(
-                    $image
-                )), $this->getQuality()
+                $path . DIRECTORY_SEPARATOR . $filename
             );
+
         }, array_filter($images));
     }
 
@@ -98,12 +103,16 @@ class ImageProcessor {
     /**
      * Get default path ..
      *
+     * @param bool $full
      * @return string
      * @throws ImageProcessorException
      */
-    protected function getPath() {
+    protected function getStorePath($full = true) {
         if( ! isset($this->configurations['store_path']) )
             throw new ImageProcessorException(_('Invalid store path'));
+
+        if(! $full)
+            return $this->configurations['store_path'];
 
         return publicPath($this->configurations['store_path']);
     }
