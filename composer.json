@@ -10,7 +10,8 @@
   "autoload": {
     "psr-4": {
       "Parfumix\\Imageonfly\\": "src/"
-    }
+    },
+    "files": ["helpers.php"]
   },
   "require": {
     "intervention/image": "2.1.1",
