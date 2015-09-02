@@ -3,9 +3,8 @@
 namespace Parfumix\Imageonfly;
 
 use Illuminate\Config\Repository;
-use Parfumix\Imageonfly\Interfaces\TemplateResolverInterface;
 
-class TemplateResolver implements TemplateResolverInterface  {
+class TemplateResolver {
 
     /**
      * @var array
@@ -16,7 +15,6 @@ class TemplateResolver implements TemplateResolverInterface  {
 
         $this->templates = $templates;
     }
-
 
     /**
      * Resolve path ..
