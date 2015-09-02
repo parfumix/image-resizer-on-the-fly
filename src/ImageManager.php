@@ -2,12 +2,8 @@
 
 namespace Parfumix\Imageonfly;
 
-use Intervention\Image\Filters\FilterInterface;
-use Intervention\Image\Image;
 use Parfumix\Imageonfly\Interfaces\ImageManagerInterface;
 use Parfumix\Imageonfly\Interfaces\ImageProcessorInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Intervention\Image\ImageManager as ManagerImage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 require_once(__DIR__ . '/../helpers.php');

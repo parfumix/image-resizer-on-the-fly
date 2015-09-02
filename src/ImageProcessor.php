@@ -6,11 +6,10 @@ use Illuminate\Config\Repository;
 use Image as Imager;
 use Intervention\Image\Image;
 use Parfumix\Imageonfly\Exceptions\ImageProcessorException;
-use Parfumix\Imageonfly\Interfaces\ImageProcessorInterface;
 use Parfumix\Imageonfly\Interfaces\TemplateResolverInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
-class ImageProcessor implements ImageProcessorInterface {
+class ImageProcessor {
 
     /**
      * @var array
@@ -112,6 +111,6 @@ class ImageProcessor implements ImageProcessorInterface {
         if( ! $this->configuration->has('store_path') )
             throw new ImageProcessorException(_('Invalid store path'));
 
-        return \App\Library\Image\public_path($this->configuration->get('store_path'));
+        return publicPath($this->configuration->get('store_path'));
     }
 }

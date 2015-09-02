@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 use Parfumix\Imageonfly\Interfaces\ImageProcessorInterface;
 use Parfumix\Imageonfly\Interfaces\TemplateResolverInterface;
 
-
 class ImageOnflyServiceProvider extends ServiceProvider {
 
     const CONFIG_PATH = 'yaml/imageonfly';
@@ -39,7 +38,7 @@ class ImageOnflyServiceProvider extends ServiceProvider {
         /**
          * Register image processor to Ioc.
          */
-        $this->app->singleton(ImageProcessorInterface::class, function($app) use($configurations) {
+        $this->app->singleton('image-processor', function($app) use($configurations) {
             return new ImageProcessor($configurations, $app[TemplateResolverInterface::class]
             );
         });
