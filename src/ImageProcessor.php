@@ -6,6 +6,7 @@ use Image as Imager;
 use Intervention\Image\Image;
 use Parfumix\Imageonfly\Exceptions\ImageProcessorException;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Flysap\Support;
 
 class ImageProcessor {
 
@@ -44,6 +45,9 @@ class ImageProcessor {
 
             if( is_null($path) )
                 $path = $this->getStorePath();
+
+            if(! Support\is_path_exists($path))
+                Support\mk_path($path);
 
             $filename =  sprintf('%s.%s', uniqid(), $this->guessExtension(
                 $image
