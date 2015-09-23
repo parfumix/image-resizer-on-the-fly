@@ -4,6 +4,7 @@ namespace Parfumix\Imageonfly;
 
 use Illuminate\Support\ServiceProvider;
 use Flysap\Support;
+use Intervention\Image\ImageServiceProviderLaravel5;
 
 class ImageOnFlyServiceProvider extends ServiceProvider {
 
@@ -29,6 +30,8 @@ class ImageOnFlyServiceProvider extends ServiceProvider {
             config_path('yaml/imageonfly/general.yaml') , 'image-on-fly'
         );
 
+        $this->registerDependencies();
+
         /**
          * Register template resolver .
          */
@@ -46,6 +49,18 @@ class ImageOnFlyServiceProvider extends ServiceProvider {
                 config('image-on-fly'),
                 $app['image-template-resolver']
             );
+        });
+    }
+
+    /**
+     * Register service provider dependencies .
+     *
+     */
+    protected function registerDependencies() {
+        $dependencies = [ImageServiceProviderLaravel5::class];
+
+        array_walk($dependencies, function($dependency) {
+            app()->register($dependency);
         });
     }
 
