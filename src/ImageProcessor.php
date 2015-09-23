@@ -39,7 +39,7 @@ class ImageProcessor {
             $images = (array)$images;
 
         return array_map(function ($image) use ($path, $filters) {
-            $image = Imager::make($image);
+            $image = app('image')->make($image);
 
             $image = $this->applyFilters($image, $filters);
 
