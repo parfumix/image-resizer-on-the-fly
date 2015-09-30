@@ -85,7 +85,7 @@ class ImageProcessor {
      */
     public function applyFilters(Image $image, array $filters) {
         foreach ($filters as $filter) {
-            $filterClass = $this->templateResolver[$filter];
+            $filterClass = $this->templateResolver->resolve($filter);
 
             if( class_exists($filterClass) )
                 $image = (new $filterClass)->applyFilter($image);
