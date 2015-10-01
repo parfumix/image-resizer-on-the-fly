@@ -33,13 +33,14 @@ class ImageProcessor {
      * @param $path
      * @param array $filters
      * @param null $placeholder
+     * @param callable $closure
      * @return array
      */
-    public function upload($images, $path = null, array $filters = [], $placeholder = null) {
+    public function upload($images, $path = null, array $filters = [], $placeholder = null, \Closure $closure = null) {
         if (! is_array($images))
             $images = (array)$images;
 
-        return array_map(function ($image) use ($path, $filters, $placeholder) {
+        return array_map(function ($image) use ($path, $filters, $placeholder, $closure) {
             $image = app('image')->make($image);
 
             $image = $this->applyFilters($image, $filters);
@@ -56,6 +57,9 @@ class ImageProcessor {
                 $filename =  sprintf('%s.%s', uniqid(), $this->guessExtension($image), $this->getQuality());
 
             $image->relative_path = $this->getStorePath(false) . DIRECTORY_SEPARATOR . $filename;
+
+            if(! is_null($closure))
+                $image = $closure($image);
 
             return $image->save(
                 $path . DIRECTORY_SEPARATOR . $filename
