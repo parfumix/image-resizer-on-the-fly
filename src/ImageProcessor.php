@@ -32,13 +32,14 @@ class ImageProcessor {
      * @param $images
      * @param $path
      * @param array $filters
+     * @param null $placeholder
      * @return array
      */
-    public function upload($images, $path = null, array $filters = []) {
+    public function upload($images, $path = null, array $filters = [], $placeholder = null) {
         if (! is_array($images))
             $images = (array)$images;
 
-        return array_map(function ($image) use ($path, $filters) {
+        return array_map(function ($image) use ($path, $filters, $placeholder) {
             $image = app('image')->make($image);
 
             $image = $this->applyFilters($image, $filters);
@@ -49,9 +50,10 @@ class ImageProcessor {
             if(! Support\is_path_exists($path))
                 Support\mk_path($path);
 
-            $filename =  sprintf('%s.%s', uniqid(), $this->guessExtension(
-                $image
-            ), $this->getQuality());
+            if(! is_null($placeholder))
+                $filename = sprintf('%s.%s', $placeholder, $this->guessExtension($image));
+            else
+                $filename =  sprintf('%s.%s', uniqid(), $this->guessExtension($image), $this->getQuality());
 
             $image->relative_path = $this->getStorePath(false) . DIRECTORY_SEPARATOR . $filename;
 
