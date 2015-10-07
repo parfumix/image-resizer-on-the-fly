@@ -37,7 +37,7 @@ class ImageOnFlyServiceProvider extends ServiceProvider {
          */
         $this->app->singleton('image-template-resolver', function() {
             return new TemplateResolver(
-                config('image-on-fly')
+                config('image-on-fly')['templates']
             );
         });
 
