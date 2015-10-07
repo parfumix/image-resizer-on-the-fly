@@ -10,3 +10,5 @@ static_path: /upload/static
 # you can delclare own templates and set alias there .
 templates:
   thumbnail: Parfumix\Imageonfly\Templates\Thumbnail
+  crop: Parfumix\Imageonfly\Templates\Crop
+  rotate: Parfumix\Imageonfly\Templates\Rotate
