@@ -69,6 +69,36 @@ class ImageProcessor {
     }
 
     /**
+     * Filter images .
+     *
+     * @param $urls
+     * @param array $filters
+     * @param callable $callback
+     * @return array
+     */
+    public function filter($urls, $filters = [], \Closure $callback = null) {
+        if (! is_array($urls))
+            $urls = (array)$urls;
+
+        return array_map(function($url) use($callback, $filters) {
+            if(! Support\is_path_exists($url))
+                return false;
+
+            $image = app('image')
+                ->make($url);
+
+            $image = $this->applyFilters($image, $filters);
+
+            if( ! is_null($callback) )
+                $image = $callback($image);
+
+            return $image->save(
+                $url
+            );
+        }, array_filter($urls));
+    }
+
+    /**
      * Guess extension .
      *
      * @param Image $image
@@ -90,11 +120,16 @@ class ImageProcessor {
      * @return Image
      */
     public function applyFilters(Image $image, array $filters) {
-        foreach ($filters as $filter) {
+        foreach ($filters as $filter => $options) {
+            if(is_numeric($filter)) {
+                $filter = $options;
+                $options = [];
+            }
+
             $filterClass = $this->templateResolver->resolve($filter);
 
             if( class_exists($filterClass) )
-                $image = (new $filterClass)->applyFilter($image);
+                $image = (new $filterClass($options))->applyFilter($image);
         }
 
         return $image;
